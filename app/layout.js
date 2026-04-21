@@ -6,45 +6,85 @@ import Sidebar from "./components/Sidebar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Wallpaper Haven",
-  description: "High-quality 4K wallpapers for your desktop",
+  title: "Wallpaper Haven | 4K Wallpapers",
+  description: "High-quality 4K wallpapers for your desktop, gaming, and mobile.",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} bg-gray-50 text-gray-900`}>
+    <html lang="en" className="scroll-smooth">
+      <body className={`${inter.className} bg-gradient-to-b from-slate-50 via-slate-100 to-slate-200 text-slate-900 antialiased`}>
         <div className="flex flex-col min-h-screen">
-          {/* HEADER remains the same */}
-          <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
-            <div className="container mx-auto flex h-16 items-center justify-between px-4">
-              <div className="text-xl font-bold tracking-tight text-blue-600">
-                WALLPAPER<span className="text-gray-900">HUB</span>
-              </div>
-              <nav className="hidden md:flex gap-6 font-medium">
-                <Link href="/" className="hover:text-blue-600">Home</Link>
-                <Link href="/popular" className="hover:text-blue-600">Popular</Link>
-                <Link href="/new" className="hover:text-blue-600">New</Link>
+          
+          {/* HEADER: Modern Glassmorphism effect */}
+          <header className="sticky top-0 z-[60] w-full border-b border-slate-200 bg-white/60 backdrop-blur-xl shadow-sm">
+            <div className="max-w-[1440px] mx-auto flex h-16 items-center justify-between px-6">
+              
+              {/* Logo */}
+              <Link href="/" className="flex items-center gap-2 group">
+                <div className="w-9 h-9 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-black text-xl group-hover:rotate-6 transition-transform">
+                  W
+                </div>
+                <div className="text-xl font-extrabold tracking-tight">
+                  <span className="text-indigo-600">WALLPAPER</span>
+                  <span className="text-slate-800">HUB</span>
+                </div>
+              </Link>
+
+              {/* Navigation Links */}
+              <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-500">
+                <Link href="/" className="hover:text-indigo-600 transition-colors">Discover</Link>
+                <Link href="/popular" className="hover:text-indigo-600 transition-colors">Trending</Link>
+                <Link href="/new" className="hover:text-indigo-600 transition-colors">Recent</Link>
               </nav>
+
+              {/* Search & Actions */}
               <div className="flex items-center gap-4">
-                <input 
-                  type="text" 
-                  placeholder="Search wallpapers..." 
-                  className="hidden sm:block px-4 py-1.5 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button className="bg-blue-600 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-blue-700">
+                <div className="relative hidden sm:block">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </span>
+                  <input 
+                    type="text" 
+                    placeholder="Search wallpapers..." 
+                    className="w-64 pl-10 pr-4 py-2 bg-slate-100/70 border border-transparent focus:border-indigo-500 focus:bg-white rounded-xl text-sm transition-all outline-none shadow-sm"
+                  />
+                </div>
+                
+                <button className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-indigo-300 transition-all active:scale-95">
                   Upload
                 </button>
               </div>
             </div>
           </header>
 
-          <div className="flex flex-1 container mx-auto">
+          {/* MAIN LAYOUT WRAPPER */}
+          <div className="flex flex-1 max-w-[1440px] mx-auto w-full">
+            {/* Sidebar stays fixed/sticky */}
             <Sidebar /> 
-            <main className="flex-1 p-6">
+
+            {/* Main Content Area */}
+            <main className="flex-1 p-6 md:p-10 bg-white/50 backdrop-blur-sm rounded-tl-3xl shadow-inner">
               {children}
             </main>
           </div>
+
+          {/* Minimalist Footer */}
+          <footer className="py-10 border-t border-slate-200 bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100">
+            <div className="max-w-[1440px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-sm text-slate-500">
+                © 2026 WallpaperHub. Part of the <span className="font-bold text-slate-700">Sigma Series</span>.
+              </p>
+              <div className="flex gap-6 text-xs font-bold text-slate-500 uppercase tracking-widest">
+                <a href="#" className="hover:text-indigo-600">Privacy</a>
+                <a href="#" className="hover:text-indigo-600">Terms</a>
+                <a href="#" className="hover:text-indigo-600">API</a>
+              </div>
+            </div>
+          </footer>
+
         </div>
       </body>
     </html>
