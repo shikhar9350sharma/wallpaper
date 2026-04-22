@@ -14,7 +14,7 @@ const wallpapers = {
   ],
   anime: [
     { id: 5, title: 'Anime Character', image: 'https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/46.jpg', downloads: 3456 },
-    { id: 6, title: 'Anime Scene', image: 'https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/49.jpg', downloads: 213409 },
+    { id: 6, title: 'Anime Scene', image: 'https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/23.jpg', downloads: 213409 },
   ],
   minimal: [
     { id: 7, title: 'A Boy', image: 'https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/32.jpg?updatedAt=1776844234556', downloads: 54356 },

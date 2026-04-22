@@ -66,7 +66,7 @@ export default function RootLayout({ children }) {
             <Sidebar /> 
 
             {/* Main Content Area */}
-            <main className="flex-1 p-6 md:p-10 bg-white/50 backdrop-blur-sm rounded-tl-3xl shadow-inner">
+            <main className="flex-1 p-1 md:p-2 bg-white/50 backdrop-blur-sm rounded-tl-3xl shadow-inner">
               {children}
             </main>
           </div>
