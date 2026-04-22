@@ -59,17 +59,23 @@ const NewWallpaper = () => {
         <>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {images.map((img, index) => (
-              <div key={img.fileId} className="rounded-lg overflow-hidden shadow-md">
+              <div
+                key={img.fileId}
+                className="group relative rounded-xl overflow-hidden shadow-md border border-slate-200 
+                               hover:shadow-xl hover:-translate-y-2 hover:scale-[1.03] 
+                               transition-all duration-300 ease-out"
+              >
                 <Image
                   src={img.url}
                   alt={img.name}
                   width={400}
                   height={250}
-                  className="object-cover w-full h-full"
+                  className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-500 ease-out"
                   loading={index === 0 ? "eager" : "lazy"}
                   priority={index === 0}
                 />
               </div>
+
             ))}
           </div>
 
