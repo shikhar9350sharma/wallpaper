@@ -12,17 +12,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} bg-gradient-to-b from-slate-50 via-slate-100 to-slate-200 text-slate-900 antialiased`}>
+    <html lang="en" data-scroll-behavior="smooth">
+      <body className={`${inter.className} bg-linear-to-b from-slate-50 via-slate-100 to-slate-200 text-slate-900 antialiased`}>
         <div className="flex flex-col min-h-screen">
           
           {/* HEADER: Modern Glassmorphism effect */}
-          <header className="sticky top-0 z-[60] w-full border-b border-slate-200 bg-white/60 backdrop-blur-xl shadow-sm">
-            <div className="max-w-[1440px] mx-auto flex h-16 items-center justify-between px-6">
+          <header className="sticky top-0 z-60 w-full border-b border-slate-200 bg-white/60 backdrop-blur-xl shadow-sm">
+            <div className="max-w-360 mx-auto flex h-16 items-center justify-between px-6">
               
               {/* Logo */}
               <Link href="/" className="flex items-center gap-2 group">
-                <div className="w-9 h-9 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-black text-xl group-hover:rotate-6 transition-transform">
+                <div className="w-9 h-9 bg-linear-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-black text-xl group-hover:rotate-6 transition-transform">
                   W
                 </div>
                 <div className="text-xl font-extrabold tracking-tight">
@@ -53,7 +53,7 @@ export default function RootLayout({ children }) {
                   />
                 </div>
                 
-                <button className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-indigo-300 transition-all active:scale-95">
+                <button className="bg-linear-to-r from-indigo-600 to-purple-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-indigo-300 transition-all active:scale-95">
                   Upload
                 </button>
               </div>
@@ -61,7 +61,7 @@ export default function RootLayout({ children }) {
           </header>
 
           {/* MAIN LAYOUT WRAPPER */}
-          <div className="flex flex-1 max-w-[1440px] mx-auto w-full">
+          <div className="flex flex-1 max-w-360 mx-auto w-full">
             {/* Sidebar stays fixed/sticky */}
             <Sidebar /> 
 
@@ -72,10 +72,10 @@ export default function RootLayout({ children }) {
           </div>
 
           {/* Minimalist Footer */}
-          <footer className="py-10 border-t border-slate-200 bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100">
-            <div className="max-w-[1440px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <footer className="py-10 border-t border-slate-200 bg-linear-to-r from-slate-100 via-slate-200 to-slate-100">
+            <div className="max-w-360 mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-sm text-slate-500">
-                © 2026 WallpaperHub. Part of the <span className="font-bold text-slate-700">Sigma Series</span>.
+                © 2026 WallpaperHub.
               </p>
               <div className="flex gap-6 text-xs font-bold text-slate-500 uppercase tracking-widest">
                 <a href="#" className="hover:text-indigo-600">Privacy</a>

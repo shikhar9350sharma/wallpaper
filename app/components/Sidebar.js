@@ -15,7 +15,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 h-[calc(100vh-64px)] sticky top-16 p-6 border-r bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white backdrop-blur-lg">
+    <aside className="w-64 h-[calc(100vh-64px)] sticky top-16 p-6 border-r bg-linear-to-b from-slate-900 via-slate-800 to-slate-900 text-white backdrop-blur-lg">
       {/* Section Title */}
       <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-[0.25em] mb-6">
         Explore
@@ -34,7 +34,7 @@ export default function Sidebar() {
                   className={`
                     flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group
                     ${isActive 
-                      ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-400/40 font-semibold' 
+                      ? 'bg-linear-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-400/40 font-semibold' 
                       : 'text-gray-400 hover:bg-slate-700 hover:text-indigo-300'}
                   `}
                 >
@@ -52,7 +52,7 @@ export default function Sidebar() {
       </nav>
 
       {/* Decorative Promo Card */}
-      <div className="mt-12 p-5 bg-gradient-to-r from-purple-700 to-indigo-600 rounded-2xl text-white shadow-lg shadow-indigo-500/30">
+      <div className="hidden mt-12 p-5 bg-linear-to-r from-purple-700 to-indigo-600 rounded-2xl text-white shadow-lg shadow-indigo-500/30">
         <p className="text-[11px] font-bold text-yellow-300 uppercase tracking-widest">Community</p>
         <p className="text-xs mt-2 leading-relaxed opacity-90">
           Upload your 4K renders and get featured on the main grid.

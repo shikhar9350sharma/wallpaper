@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-slate-100 to-slate-200">
+    <main className="min-h-screen bg-linear-to-b from-slate-50 via-slate-100 to-slate-200">
       <Suspense fallback={<div className="p-10 text-slate-500">Loading wallpapers...</div>}>
         <Home />
       </Suspense>
