@@ -1,25 +1,27 @@
-import { notFound } from "next/navigation";
-import Image from "next/image";
+import { notFound } from 'next/navigation';
+import Image from 'next/image';
 
-const categories = ["cars", "gaming", "anime"];
+const categories = ['cars', 'gaming', 'anime'];
 
 const wallpapers = {
   cars: [
-    { id: 1, title: "Sports Car", image: "https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/46.jpg", downloads: 1234 },
-    { id: 2, title: "Luxury Sedan", image: "https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/44.jpg", downloads: 987 },
+    { id: 1, title: 'Sports Car', image: 'https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/46.jpg', downloads: 1234 },
+    { id: 2, title: 'Luxury Sedan', image: 'https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/44.jpg', downloads: 987 },
   ],
   gaming: [
-    { id: 3, title: "Cyberpunk City", image: "https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/1.jpeg", downloads: 2345 },
-    { id: 4, title: "Fantasy Landscape", image: "https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/44.jpg", downloads: 1567 },
+    { id: 3, title: 'Cyberpunk City', image: 'https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/1.jpeg', downloads: 2345 },
+    { id: 4, title: 'Fantasy Landscape', image: 'https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/44.jpg', downloads: 1567 },
   ],
   anime: [
-    { id: 5, title: "Anime Character", image: "https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/46.jpg", downloads: 3456 },
-    { id: 6, title: "Anime Scene", image: "https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/49.jpg", downloads: 2109 },
+    { id: 5, title: 'Anime Character', image: 'https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/46.jpg', downloads: 3456 },
+    { id: 6, title: 'Anime Scene', image: 'https://ik.imagekit.io/hopetoseeyouagain/Wallpaper/49.jpg', downloads: 2109 },
   ],
 };
 
-export default function CategoryPage({ params }) {
-  const { slug } = params;
+// NOTICE: Added 'async' here
+export default async function CategoryPage({ params }) {
+  // NOTICE: Added 'await' here
+  const { slug } = await params;
 
   if (!categories.includes(slug)) {
     notFound();
@@ -28,31 +30,26 @@ export default function CategoryPage({ params }) {
   const categoryWallpapers = wallpapers[slug] || [];
 
   return (
-    <section className="p-6">
+    <div className="p-6">
       <header className="mb-10">
         <h1 className="text-4xl font-black capitalize tracking-tight text-slate-900">
           {slug} <span className="text-blue-600">Wallpapers</span>
         </h1>
-        <p className="text-slate-500 mt-2">
-          Browse the best high-resolution {slug} backgrounds.
-        </p>
+        <p className="text-slate-500 mt-2">Browse the best high-resolution {slug} backgrounds.</p>
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {categoryWallpapers.map((wallpaper, index) => (
-          <div
-            key={wallpaper.id}
-            className="group bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow duration-300"
-          >
-            <div className="relative aspect-video overflow-hidden">
+          <div key={wallpaper.id} className="group bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div className="relative w-full h-48 overflow-hidden">
               <Image
                 src={wallpaper.image}
                 alt={wallpaper.title}
-                width={400}
-                height={250}
+                width = {1500}
+                height = {1500}
+                loading={index === 0 ? "eager" : "lazy"}   // First image loads eagerly, rest stay lazy
+                priority={index === 0} 
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                loading={index === 0 ? "eager" : "lazy"}
-                priority={index === 0}
               />
             </div>
             <div className="p-4">
@@ -73,6 +70,6 @@ export default function CategoryPage({ params }) {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
