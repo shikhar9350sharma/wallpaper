@@ -1,33 +1,40 @@
 @import 'tailwindcss';
 
-/* app/globals.css */
-@import "tailwindcss";
-
 @theme {
-  --color-background: #F0F4F8;
+  /* Base tokens — Light Mode */
+  --color-background: #F8F5F2;
   --color-surface: #FFFFFF;
-  --color-primary: #102A43;
-  --color-primary-foreground: #F0F4F8;
-  --color-accent: #FF6B6B;
+  --color-primary: #1E1B2E;
+  --color-primary-foreground: #FFFFFF;
+  --color-accent: #7C3AED;
   --color-accent-foreground: #FFFFFF;
-  --color-muted: #829AB1;
-  --color-border: #D9E2EC;
-  --color-destructive: #D64545;
-  --color-ring: #FF6B6B;
+  --color-muted: #8C8580;
+  --color-border: #E6E0DB;
+  --color-destructive: #DC2626;
+  --color-ring: #7C3AED;
+
+  /* Radius */
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
 }
 
+/* Dark mode overrides */
 .dark {
-  --color-background: #0B1623;
-  --color-surface: #152233;
-  --color-primary: #D9E2EC;
-  --color-primary-foreground: #0B1623;
-  --color-accent: #FF8787;
-  --color-accent-foreground: #0B1623;
-  --color-muted: #829AB1;
-  --color-border: #243B53;
-  --color-destructive: #EF4444;
-  --color-ring: #FF8787;
+  --color-background: #0C0A0F;
+  --color-surface: #16121E;
+  --color-primary: #F0EBE5;
+  --color-primary-foreground: #1E1B2E;
+  --color-accent: #A78BFA;
+  --color-accent-foreground: #0C0A0F;
+  --color-muted: #9CA3AF;
+  --color-border: #2A2535;
+  --color-destructive: #FCA5A5;
+  --color-ring: #A78BFA;
 }
+
 
 @layer base {
   body {
