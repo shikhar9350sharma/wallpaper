@@ -1,1 +1,36 @@
 @import 'tailwindcss';
+
+/* app/globals.css */
+@import "tailwindcss";
+
+@theme {
+  --color-background: #F0F4F8;
+  --color-surface: #FFFFFF;
+  --color-primary: #102A43;
+  --color-primary-foreground: #F0F4F8;
+  --color-accent: #FF6B6B;
+  --color-accent-foreground: #FFFFFF;
+  --color-muted: #829AB1;
+  --color-border: #D9E2EC;
+  --color-destructive: #D64545;
+  --color-ring: #FF6B6B;
+}
+
+.dark {
+  --color-background: #0B1623;
+  --color-surface: #152233;
+  --color-primary: #D9E2EC;
+  --color-primary-foreground: #0B1623;
+  --color-accent: #FF8787;
+  --color-accent-foreground: #0B1623;
+  --color-muted: #829AB1;
+  --color-border: #243B53;
+  --color-destructive: #EF4444;
+  --color-ring: #FF8787;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-primary;
+  }
+}
