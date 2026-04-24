@@ -49,7 +49,10 @@ export default function ClientLayout({ children }) {
             </div>
 
             {/* Theme toggle button */}
-            <ThemeToggle />
+            <div className='hidden lg:block'>
+                <ThemeToggle />
+
+            </div>
 
             {/* Hamburger for mobile */}
             <button 
@@ -73,7 +76,7 @@ export default function ClientLayout({ children }) {
       </div>
 
       {/* Footer */}
-      <footer className="py-10 border-t border-border bg-surface">
+      <footer className="py-6 md:py-10 border-t border-border bg-surface">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted">© 2026 WallpaperHub.</p>
           <div className="flex gap-6 text-xs font-bold text-muted uppercase tracking-widest">

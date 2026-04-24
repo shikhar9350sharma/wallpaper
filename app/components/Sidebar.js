@@ -1,6 +1,7 @@
 "use client";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { ThemeToggle } from './theme-toggle';
 
 const categories = [
   { name: 'All Wallpapers', slug: '', emoji: '🖼️' },
@@ -35,16 +36,20 @@ export default function Sidebar({ isOpen, onClose }) {
       >
         {/* Close button for mobile */}
         <button
-          className="absolute top-4 right-4 lg:hidden text-muted hover:text-primary"
+          className=" absolute top-3 right-4 lg:hidden text-muted hover:text-primary"
           onClick={onClose}
           aria-label="Close sidebar"
         >
           ✕
         </button>
-
-        <h2 className="text-sm font-semibold text-muted uppercase tracking-[0.25em] mb-6">
-          Explore
-        </h2>
+        <div className='mt-8 mb-3.75 md:mt-2 md:mb-6 flex items-center justify-between'>
+          <h2 className="text-sm font-semibold text-muted uppercase tracking-[0.25em]">
+            Explore
+          </h2>
+          <div className='lg:hidden'>
+            <ThemeToggle className='hidden' />
+          </div>
+        </div>
 
         <nav role="navigation">
           <ul className="space-y-2">
@@ -87,6 +92,7 @@ export default function Sidebar({ isOpen, onClose }) {
             Learn More
           </button>
         </div>
+
       </aside>
     </>
   );
