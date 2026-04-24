@@ -7,17 +7,23 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [error, setError] = useState(null);
 
-  const fetchImages = async (page) => {
+  const fetchImages = async (page, append = false) => {
     setLoading(true);
+    setError(null);
     try {
       const response = await fetch(`/api/wallpapers?page=${page}`);
       const data = await response.json();
-      setImages(data);
-      // If we got fewer than 12 images, there are no more pages
+
+      // Append or replace depending on mode
+      setImages(prev => (append ? [...prev, ...data] : data));
+
+      // If fewer than 12 items, no more pages
       setHasMore(data.length === 12);
-    } catch (error) {
-      console.error("Error fetching images:", error);
+    } catch (err) {
+      console.error("Error fetching images:", err);
+      setError("Failed to load wallpapers. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -39,13 +45,23 @@ export default function Home() {
     }
   };
 
+  const handleLoadMore = () => {
+    if (hasMore && !loading) {
+      const nextPage = currentPage + 1;
+      setCurrentPage(nextPage);
+      fetchImages(nextPage, true); // append mode
+    }
+  };
+
   return (
     <>
       <header className="mb-10">
         <h1 className="text-4xl font-black capitalize tracking-tight text-slate-900">
           My <span className="text-blue-600">Wallpapers</span>
         </h1>
-        <p className="text-slate-500 mt-2">Browse the best high-resolution backgrounds.</p>
+        <p className="text-slate-500 mt-2">
+          Browse the best high-resolution backgrounds.
+        </p>
       </header>
 
       {loading && (
@@ -55,7 +71,11 @@ export default function Home() {
         </div>
       )}
 
-      {!loading && (
+      {error && (
+        <p className="text-red-500 text-center mb-6">{error}</p>
+      )}
+
+      {!loading && !error && (
         <>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {images.map((img, index) => (
@@ -67,17 +87,17 @@ export default function Home() {
               >
                 <Image
                   src={img.url}
-                  alt={img.name}
+                  alt={img.name || "Wallpaper image"}
                   width={400}
                   height={250}
+                  sizes="(max-width: 768px) 50vw, 25vw"
                   className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-500 ease-out"
-                  loading={index === 0 ? "eager" : "lazy"}
-                  priority={index === 0}
+                  loading={index < 4 ? "eager" : "lazy"}
+                  priority={index < 4}
                 />
               </div>
             ))}
           </div>
-
 
           {/* Pagination Controls */}
           <div className="flex justify-center items-center mt-10 space-x-4">
@@ -99,6 +119,17 @@ export default function Home() {
               className="px-4 py-2 bg-blue-600 text-white rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-blue-700 transition-colors"
             >
               Next
+            </button>
+          </div>
+
+          {/* Load More Option */}
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={handleLoadMore}
+              disabled={!hasMore || loading}
+              className="px-6 py-2 bg-green-600 text-white rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-green-700 transition-colors"
+            >
+              Load More
             </button>
           </div>
         </>
