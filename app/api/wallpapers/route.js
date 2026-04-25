@@ -4,8 +4,8 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page") || "0", 10);
-    
-    // Validate page number
+    const query = searchParams.get("q") || "";
+
     if (isNaN(page) || page < 0) {
       return new Response(
         JSON.stringify({ error: "Invalid page number" }),
@@ -16,21 +16,34 @@ export async function GET(req) {
     const limit = 12;
     const skip = page * limit;
 
-    const files = await imagekit.listFiles({
+    const options = {
       path: "/Wallpaper",
-      limit,
-      skip,
-    });
+      limit: query.trim() ? 100 : limit,
+      skip: query.trim() ? 0 : skip,
+    };
 
-    // Map to consistent format for your frontend
-    const wallpapers = files.map((file, index) => ({
+    const files = await imagekit.listFiles(options);
+
+    let filteredFiles = files;
+
+    if (query.trim()) {
+      const searchTerm = query.trim().toLowerCase();
+      filteredFiles = files.filter((file) => {
+        const fileName = (file.name || "").toLowerCase();
+        const customName = (file.customMetadata?.name || "").toLowerCase();
+        return fileName.includes(searchTerm) || customName.includes(searchTerm);
+      });
+      filteredFiles = filteredFiles.slice(skip, skip + limit);
+    }
+
+    const wallpapers = filteredFiles.map((file, index) => ({
       fileId: file.fileId || `img-${skip + index}`,
       url: file.url,
-      name: file.customMetadata?.name || file.name?.replace(/\.[^/.]+$/, "") || "Untitled",
-      resolution: file.customMetadata?.resolution || `${file.width}x${file.height}`,
+      name: file.customMetadata?.name || file.name?.replace(/\.[^/.]+$/, "") || "Untitled Wallpaper",
+      resolution: file.customMetadata?.resolution || `${file.width || 1920}x${file.height || 1080}`,
       downloads: file.customMetadata?.downloads || Math.floor(Math.random() * 50000),
       date: new Date(file.createdAt).toLocaleDateString(),
-      size: (file.size / 1024 / 1024).toFixed(2) + " MB", // optional
+      size: file.size ? (file.size / 1024 / 1024).toFixed(2) + " MB" : null,
     }));
 
     return new Response(JSON.stringify(wallpapers), {
