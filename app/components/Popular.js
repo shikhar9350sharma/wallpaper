@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import FavoriteButton from "./ui/FavoriteButton";
 
 export default function Popular() {
   const [images, setImages] = useState([]);
@@ -106,8 +107,19 @@ export default function Popular() {
                       loading={index < 4 ? "eager" : "lazy"}
                       priority={index < 4}
                     />
+
+                    {/* Favorite Button */}
+                    <FavoriteButton
+                      wallpaper={{
+                        id: img.fileId || `popular-${index}`,
+                        url: img.url,
+                        name: img.name,
+                      }}
+                    />
+
                     {/* Hover overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
                     {/* Download button on hover */}
                     <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
                       <a
@@ -125,6 +137,7 @@ export default function Popular() {
                       </a>
                     </div>
                   </div>
+
                   {/* Caption */}
                   <div className="p-3">
                     <p className="text-sm font-semibold text-primary truncate">

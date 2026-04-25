@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import FavoriteButton from "./ui/FavoriteButton";
 
 export default function Home() {
   const [images, setImages] = useState([]);
@@ -109,9 +110,20 @@ export default function Home() {
                       loading={index < 4 ? "eager" : "lazy"}
                       priority={index < 4}
                     />
+                    
+                    {/* Favorite Button */}
+                    <FavoriteButton
+                      wallpaper={{
+                        id: img.fileId || `home-${index}`,
+                        url: img.url,
+                        name: img.name,
+                      }}
+                    />
+
                     {/* Hover overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    {/* Download button on hover */}
+                    
+                    {/* Download button */}
                     <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
                       <a
                         href={img.url}
@@ -161,7 +173,6 @@ export default function Home() {
           {/* Pagination + Load More */}
           {images.length > 0 && (
             <div className="flex flex-col items-center gap-4 pt-6 border-t border-border">
-              {/* Pagination */}
               <div className="flex items-center gap-3">
                 <button
                   onClick={handlePrevPage}
@@ -190,7 +201,6 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* Load More */}
               <button
                 onClick={handleLoadMore}
                 disabled={!hasMore || loading}

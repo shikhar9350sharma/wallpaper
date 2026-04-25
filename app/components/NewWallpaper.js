@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import FavoriteButton from "./ui/FavoriteButton";
 
 export default function NewWallpaper() {
   const [images, setImages] = useState([]);
@@ -107,14 +108,26 @@ export default function NewWallpaper() {
                       loading={index < 4 ? "eager" : "lazy"}
                       priority={index < 4}
                     />
+
+                    {/* Favorite Button */}
+                    <FavoriteButton
+                      wallpaper={{
+                        id: img.fileId || `new-${index}`,
+                        url: img.url,
+                        name: img.name,
+                      }}
+                    />
+
                     {/* New badge */}
-                    <div className="absolute top-3 left-3">
+                    <div className="absolute top-3 right-3">
                       <span className="px-2 py-1 bg-accent text-accent-foreground text-[10px] font-bold uppercase tracking-wider rounded-md">
                         New
                       </span>
                     </div>
+
                     {/* Hover overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
                     {/* Download button on hover */}
                     <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
                       <a
@@ -132,6 +145,7 @@ export default function NewWallpaper() {
                       </a>
                     </div>
                   </div>
+
                   {/* Caption */}
                   <div className="p-3">
                     <p className="text-sm font-semibold text-primary truncate">
