@@ -34,7 +34,6 @@
   --color-destructive: #FCA5A5;
   --color-ring: #A78BFA;
 }
-
 @layer base {
   body {
     @apply bg-background text-primary;
