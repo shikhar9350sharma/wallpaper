@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { ThemeToggle } from "./theme-toggle";
+import ThemeSwitcher from "./ThemeSwitcher";
 import {
   Home,
   Flame,
@@ -79,7 +80,7 @@ export default function Sidebar({ isOpen, onClose, collapsed, onToggleCollapse }
       <aside
         className={`
           fixed lg:hidden top-0 left-0 z-50
-          h-[100dvh] w-72
+          h-dvh w-72
           bg-surface border-r border-border
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
@@ -91,6 +92,7 @@ export default function Sidebar({ isOpen, onClose, collapsed, onToggleCollapse }
           <span className="text-lg font-bold text-primary">Menu</span>
           <div className="flex items-center gap-2">
             <ThemeToggle />
+            <ThemeSwitcher />
             <button
               onClick={onClose}
               className="p-2 rounded-lg hover:bg-muted/20 text-primary transition-colors"

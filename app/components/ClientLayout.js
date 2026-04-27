@@ -5,10 +5,11 @@ import Sidebar from "./Sidebar";
 import { useState, createContext, useContext, useCallback } from "react";
 import { ThemeToggle } from "./theme-toggle";
 import { Search, X } from "lucide-react";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 export const SearchContext = createContext({
   searchQuery: "",
-  setSearchQuery: () => {},
+  setSearchQuery: () => { },
 });
 
 export function useSearch() {
@@ -118,11 +119,10 @@ export default function ClientLayout({ children }) {
                       ? `Results: ${searchQuery}`
                       : "Search wallpapers..."
                   }
-                  className={`w-48 xl:w-64 pl-10 pr-10 py-2 bg-background border rounded-xl text-sm transition-all outline-none ${
-                    searchQuery
+                  className={`w-48 xl:w-64 pl-10 pr-10 py-2 bg-background border rounded-xl text-sm transition-all outline-none ${searchQuery
                       ? "border-accent text-accent"
                       : "border-border focus:border-accent"
-                  }`}
+                    }`}
                 />
                 {(searchInput || searchQuery) && (
                   <button
@@ -136,7 +136,8 @@ export default function ClientLayout({ children }) {
               </form>
 
               {/* Theme toggle */}
-              <div className="hidden lg:block">
+              <div className="hidden lg:flex items-center gap-2">
+                <ThemeSwitcher />
                 <ThemeToggle />
               </div>
             </div>

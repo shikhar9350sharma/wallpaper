@@ -1,19 +1,127 @@
 @import 'tailwindcss';
 
-@theme {
-  /* Base tokens — Light Mode */
-  --color-background: #F8F5F2;
-  --color-surface: #FFFFFF;
-  --color-primary: #1E1B2E;
-  --color-primary-foreground: #FFFFFF;
-  --color-accent: #7C3AED;
-  --color-accent-foreground: #FFFFFF;
-  --color-muted: #8C8580;
-  --color-border: #E6E0DB;
-  --color-destructive: #DC2626;
-  --color-ring: #7C3AED;
+/* Define CSS custom properties that CAN be changed dynamically */
+:root {
+  --background: #F8F5F2;
+  --surface: #FFFFFF;
+  --primary: #1E1B2E;
+  --primary-foreground: #FFFFFF;
+  --accent: #7C3AED;
+  --accent-foreground: #FFFFFF;
+  --muted: #8C8580;
+  --border: #E6E0DB;
+  --destructive: #DC2626;
+  --ring: #7C3AED;
+}
 
-  /* Radius */
+/* Dark mode: Midnight Plum */
+.dark {
+  --background: #0C0A0F;
+  --surface: #16121E;
+  --primary: #F0EBE5;
+  --primary-foreground: #1E1B2E;
+  --accent: #A78BFA;
+  --accent-foreground: #0C0A0F;
+  --muted: #9CA3AF;
+  --border: #2A2535;
+  --destructive: #FCA5A5;
+  --ring: #A78BFA;
+}
+
+/* Ocean Breeze Theme */
+[data-theme="ocean"] {
+  --background: #F0F4F8;
+  --surface: #FFFFFF;
+  --primary: #1A365D;
+  --primary-foreground: #FFFFFF;
+  --accent: #0EA5E9;
+  --accent-foreground: #FFFFFF;
+  --muted: #64748B;
+  --border: #CBD5E1;
+  --destructive: #EF4444;
+  --ring: #0EA5E9;
+}
+
+[data-theme="ocean"].dark {
+  --background: #0F172A;
+  --surface: #1E293B;
+  --primary: #E2E8F0;
+  --primary-foreground: #0F172A;
+  --accent: #38BDF8;
+  --accent-foreground: #0F172A;
+  --muted: #94A3B8;
+  --border: #334155;
+  --destructive: #F87171;
+  --ring: #38BDF8;
+}
+
+/* Forest Zen Theme */
+[data-theme="forest"] {
+  --background: #FAF7F2;
+  --surface: #FFFFFF;
+  --primary: #1C1917;
+  --primary-foreground: #FAF7F2;
+  --accent: #059669;
+  --accent-foreground: #FFFFFF;
+  --muted: #78716C;
+  --border: #D6D3D1;
+  --destructive: #DC2626;
+  --ring: #059669;
+}
+
+[data-theme="forest"].dark {
+  --background: #0C0A09;
+  --surface: #1C1917;
+  --primary: #E7E5E4;
+  --primary-foreground: #0C0A09;
+  --accent: #34D399;
+  --accent-foreground: #0C0A09;
+  --muted: #A8A29E;
+  --border: #292524;
+  --destructive: #FCA5A5;
+  --ring: #34D399;
+}
+
+/* Sunset Glow Theme */
+[data-theme="sunset"] {
+  --background: #FFF7ED;
+  --surface: #FFFFFF;
+  --primary: #431407;
+  --primary-foreground: #FFF7ED;
+  --accent: #EA580C;
+  --accent-foreground: #FFFFFF;
+  --muted: #78716C;
+  --border: #FED7AA;
+  --destructive: #DC2626;
+  --ring: #EA580C;
+}
+
+[data-theme="sunset"].dark {
+  --background: #0C0A09;
+  --surface: #1C1917;
+  --primary: #FED7AA;
+  --primary-foreground: #0C0A09;
+  --accent: #FB923C;
+  --accent-foreground: #0C0A09;
+  --muted: #A8A29E;
+  --border: #451A03;
+  --destructive: #FCA5A5;
+  --ring: #FB923C;
+}
+
+/* Map CSS variables to Tailwind theme */
+@theme {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-ring: var(--ring);
+
   --radius: 0.625rem;
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -21,21 +129,9 @@
   --radius-xl: calc(var(--radius) * 1.4);
 }
 
-/* Dark mode overrides */
-.dark {
-  --color-background: #0C0A0F;
-  --color-surface: #16121E;
-  --color-primary: #F0EBE5;
-  --color-primary-foreground: #1E1B2E;
-  --color-accent: #A78BFA;
-  --color-accent-foreground: #0C0A0F;
-  --color-muted: #9CA3AF;
-  --color-border: #2A2535;
-  --color-destructive: #FCA5A5;
-  --color-ring: #A78BFA;
-}
 @layer base {
   body {
-    @apply bg-background text-primary;
+    background-color: var(--background);
+    color: var(--primary);
   }
 }
