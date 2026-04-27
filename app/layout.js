@@ -3,7 +3,11 @@ import { Inter } from "next/font/google";
 import ClientLayout from "./components/ClientLayout";
 import { Providers } from "./providers";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap", 
+  variable: "--font-inter",
+});
 
 export const metadata = {
   title: "Wallpaper Haven | 4K Wallpapers",
