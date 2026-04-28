@@ -21,6 +21,7 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  Gamepad2,
 } from "lucide-react";
 
 export default function Sidebar({ isOpen, onClose, collapsed, onToggleCollapse }) {
@@ -61,6 +62,7 @@ export default function Sidebar({ isOpen, onClose, collapsed, onToggleCollapse }
     { name: "Cars", icon: Car, href: "/category/cars" },
     { name: "Space", icon: Rocket, href: "/category/space" },
     { name: "City", icon: Building2, href: "/category/city" },
+    { name: "Gaming", icon: Gamepad2, href: "/category/gaming" },
   ];
 
   const collapsedWidth = "w-16";
