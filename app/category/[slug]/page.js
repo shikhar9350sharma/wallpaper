@@ -36,5 +36,5 @@ export default async function CategoryPage({ params }) {
 
   const categoryWallpapers = await res.json();
 
-  return <CategoryContent slug={slug} wallpapers={categoryWallpapers} />;
+  return <CategoryContent slug={slug} initialWallpapers={categoryWallpapers} />;
 }

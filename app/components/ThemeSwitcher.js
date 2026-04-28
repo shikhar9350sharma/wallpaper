@@ -65,7 +65,7 @@ export default function ThemeSwitcher() {
             className="fixed inset-0 z-40"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute top-12.5 right-0 mt-2 w-56 bg-surface border border-border rounded-xl shadow-xl z-50 p-2">
+          <div className="absolute space-y-1 top-12.5 right-0 mt-2 w-56 bg-surface border border-border rounded-xl shadow-xl z-50 p-2">
             <p className="text-xs font-bold text-muted uppercase tracking-wider px-3 py-2">
               Choose Theme
             </p>

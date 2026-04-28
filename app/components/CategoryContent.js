@@ -1,9 +1,50 @@
-"use client";
+﻿"use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import FavoriteButton from "./ui/FavoriteButton";
 
-export default function CategoryContent({ slug, wallpapers }) {
+export default function CategoryContent({ slug, initialWallpapers = [] }) {
+  const [images, setImages] = useState(initialWallpapers);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(initialWallpapers.length === 12);
+  const [error, setError] = useState(null);
+
+  const fetchCategoryImages = async (page) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`/api/wallpapers/${slug}?page=${page}`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      setImages(data);
+      setHasMore(data.length === 12);
+    } catch (err) {
+      console.error("Error fetching category wallpapers:", err);
+      setError("Failed to load category wallpapers. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (currentPage === 0) {
+      setImages(initialWallpapers);
+      setHasMore(initialWallpapers.length === 12);
+      return;
+    }
+    fetchCategoryImages(currentPage);
+  }, [currentPage, slug, initialWallpapers]);
+
+  const handleNextPage = () => {
+    if (hasMore && !loading) setCurrentPage((prev) => prev + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 0 && !loading) setCurrentPage((prev) => prev - 1);
+  };
+
   const handleDownloadClick = (e) => {
     e.stopPropagation();
   };
@@ -15,7 +56,7 @@ export default function CategoryContent({ slug, wallpapers }) {
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-3">
             <span className="px-3 py-1 bg-accent/10 text-accent text-xs font-bold uppercase tracking-wider rounded-full">
-              {wallpapers.length} wallpapers
+              {images.length} wallpapers
             </span>
           </div>
           <h1 className="text-3xl md:text-5xl font-black capitalize tracking-tight text-primary">
@@ -28,8 +69,29 @@ export default function CategoryContent({ slug, wallpapers }) {
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
       </div>
 
+      {/* Loading State */}
+      {loading && images.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-16">
+          <div className="inline-block animate-spin rounded-full h-10 w-10 border-2 border-accent border-t-transparent"></div>
+          <p className="mt-4 text-muted font-medium">Loading wallpapers...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <div className="bg-destructive/10 border border-destructive/20 rounded-xl p-6 text-center">
+          <p className="text-destructive font-medium">{error}</p>
+          <button
+            onClick={() => fetchCategoryImages(currentPage)}
+            className="mt-3 px-4 py-2 bg-destructive text-white rounded-lg text-sm hover:opacity-90 transition-opacity"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
       {/* Empty State */}
-      {wallpapers.length === 0 && (
+      {!error && images.length === 0 && !loading && (
         <div className="text-center py-16">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted/20 flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -42,16 +104,14 @@ export default function CategoryContent({ slug, wallpapers }) {
       )}
 
       {/* Image Grid */}
-      {wallpapers.length > 0 && (
+      {images.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {wallpapers.map((wallpaper, index) => (
+          {images.map((wallpaper, index) => (
             <div
               key={wallpaper.id}
-              className="group relative rounded-xl overflow-hidden shadow-sm border border-border 
-               hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] 
-               transition-all duration-300 ease-out cursor-pointer bg-surface"
+              className="group relative rounded-xl overflow-hidden shadow-sm border border-border hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 ease-out cursor-pointer bg-surface"
             >
-              <div className="aspect-[4/3] relative overflow-hidden">
+              <div className="aspect-[4/3] relative overflow-hidden bg-muted/10">
                 <Image
                   src={wallpaper.image}
                   alt={wallpaper.title}
@@ -62,7 +122,6 @@ export default function CategoryContent({ slug, wallpapers }) {
                   priority={index < 4}
                 />
 
-                {/* Favorite Button */}
                 <FavoriteButton
                   wallpaper={{
                     id: wallpaper.id,
@@ -71,10 +130,8 @@ export default function CategoryContent({ slug, wallpapers }) {
                   }}
                 />
 
-                {/* Hover overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                {/* Download button on hover */}
                 <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
                   <a
                     href={wallpaper.image}
@@ -100,11 +157,51 @@ export default function CategoryContent({ slug, wallpapers }) {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
-                  {wallpaper.downloads.toLocaleString()} downloads
+                  {wallpaper.downloads?.toLocaleString() || "0"} downloads
                 </div>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {images.length > 0 && (
+        <div className="flex flex-col items-center gap-4 pt-6 border-t border-border">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handlePrevPage}
+              disabled={currentPage === 0 || loading}
+              className="flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg text-sm font-medium disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed hover:brightness-110 transition-all"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Previous
+            </button>
+
+            <span className="px-4 py-2 bg-surface border border-border rounded-lg text-sm font-semibold text-primary min-w-[100px] text-center">
+              Page {currentPage + 1}
+            </span>
+
+            <button
+              onClick={handleNextPage}
+              disabled={!hasMore || loading}
+              className="flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg text-sm font-medium disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed hover:brightness-110 transition-all"
+            >
+              Next
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+          
+          {loading && (
+            <div className="flex items-center gap-2 text-sm text-muted">
+              <div className="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+              Loading...
+            </div>
+          )}
         </div>
       )}
     </div>
