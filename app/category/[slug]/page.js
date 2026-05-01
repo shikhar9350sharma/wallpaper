@@ -1,40 +1,24 @@
 import { notFound } from "next/navigation";
 import CategoryContent from "../../components/CategoryContent";
+import { getCategories, getWallpapersByCategory } from "../../lib/wallpaperService";
 
-const categories = [
-  "nature",
-  "abstract",
-  "minimal",
-  "dark",
-  "anime",
-  "cars",
-  "space",
-  "city",
-  "gaming",
-];
 
+// Use shared categories from service
 export async function generateStaticParams() {
+  const categories = getCategories();
   return categories.map((slug) => ({ slug }));
 }
 
 export default async function CategoryPage({ params }) {
   const { slug } = await params;
 
-  if (!categories.includes(slug)) {
+  // ✅ Fetch directly from ImageKit — no localhost HTTP call!
+  const categoryWallpapers = await getWallpapersByCategory(slug);
+
+  // getWallpapersByCategory returns null if category doesn't exist
+  if (!categoryWallpapers) {
     notFound();
   }
-
-  // Fetch wallpapers from your category API
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const res = await fetch(`${baseUrl}/api/wallpapers/${slug}`, {
-    next: { revalidate: 60 },
-  });
-
-  if (!res.ok) {
-    notFound();
-  }
-
-  const categoryWallpapers = await res.json();
 
   return <CategoryContent slug={slug} initialWallpapers={categoryWallpapers} />;
 }

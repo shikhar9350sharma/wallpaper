@@ -1,5 +1,4 @@
-// app/api/wallpapers/[category]/route.js
-import imagekit from "@/app/lib/imagekit";
+import { getWallpapersByCategory } from "../../../lib/wallpaperService";
 
 export async function GET(req, { params }) {
   try {
@@ -14,22 +13,14 @@ export async function GET(req, { params }) {
       );
     }
 
-    const limit = 12;
-    const skip = page * limit;
+    const wallpapers = await getWallpapersByCategory(category, page);
 
-    const files = await imagekit.listFiles({
-      path: `/Wallpaper/${category}`,
-      limit,
-      skip,
-    });
-
-    // Map to the exact shape CategoryContent expects
-    const wallpapers = files.map((file, index) => ({
-      id: file.fileId || `img-${skip + index}`,
-      title: file.customMetadata?.name || file.name?.replace(/\.[^/.]+$/, "") || "Untitled Wallpaper",
-      image: file.url,
-      downloads: file.customMetadata?.downloads || Math.floor(Math.random() * 50000),
-    }));
+    if (!wallpapers) {
+      return new Response(
+        JSON.stringify({ error: "Category not found" }),
+        { status: 404 }
+      );
+    }
 
     return new Response(JSON.stringify(wallpapers), {
       status: 200,
