@@ -1,6 +1,4 @@
-
 import { getAllWallpapers } from "../../lib/wallpaperService";
-
 
 export async function GET(req) {
   try {
@@ -25,10 +23,16 @@ export async function GET(req) {
       },
     });
   } catch (error) {
+    // Log full error server-side for debugging (includes stack trace, API keys in context, etc.)
     console.error("ImageKit API Error:", error);
+    
+    // Send generic error to client — never expose internal details
     return new Response(
-      JSON.stringify({ error: "Failed to fetch wallpapers", details: error.message }),
-      { status: 500 }
+      JSON.stringify({ error: "Failed to fetch wallpapers. Please try again later." }),
+      { 
+        status: 500,
+        headers: { "Content-Type": "application/json" }
+      }
     );
   }
 }

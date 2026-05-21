@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import FavoriteButton from "./ui/FavoriteButton";
 import { useSearch } from "./ClientLayout";
@@ -21,6 +21,7 @@ export default function Home() {
         query ? `&q=${encodeURIComponent(query)}` : ""
       }`;
       const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
       setImages((prev) => (append ? [...prev, ...data] : data));
       setHasMore(data.length === 12);
@@ -35,6 +36,7 @@ export default function Home() {
   // Reset and search when query changes
   useEffect(() => {
     setCurrentPage(0);
+    setImages([]); // Clear previous results
     fetchImages(0, searchQuery);
   }, [searchQuery]);
 
@@ -45,22 +47,35 @@ export default function Home() {
     }
   }, [currentPage]);
 
-  const handleNextPage = () => {
-    if (hasMore && !loading) setCurrentPage((prev) => prev + 1);
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 0 && !loading) setCurrentPage((prev) => prev - 1);
-  };
-
   const handleLoadMore = () => {
     if (hasMore && !loading) {
       setCurrentPage((prev) => prev + 1);
     }
   };
 
-  const handleDownloadClick = (e) => {
-    e.stopPropagation();
+  const handleBackToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setCurrentPage(0);
+    fetchImages(0, searchQuery);
+  };
+
+  const handleDownload = async (url, filename) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = filename || "wallpaper.jpg";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error("Download failed:", err);
+      // Fallback: open in new tab
+      window.open(url, "_blank");
+    }
   };
 
   return (
@@ -76,6 +91,11 @@ export default function Home() {
               ? `Found wallpapers matching "${searchQuery}"`
               : "Browse the best high-resolution backgrounds curated for you."}
           </p>
+          {images.length > 0 && (
+            <p className="text-muted text-sm mt-2">
+              Showing {images.length} wallpapers
+            </p>
+          )}
         </div>
         <div className="absolute -top-20 -right-20 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
       </div>
@@ -136,13 +156,12 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                     <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                      <a
-                        href={img.url}
-                        download
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDownload(img.url, img.name);
+                        }}
                         className="flex items-center gap-2 px-3 py-2 bg-white/20 backdrop-blur-md rounded-lg text-white text-sm font-medium hover:bg-white/30 transition-colors"
-                        onClick={handleDownloadClick}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +178,7 @@ export default function Home() {
                           />
                         </svg>
                         Download
-                      </a>
+                      </button>
                     </div>
                   </div>
 
@@ -223,70 +242,49 @@ export default function Home() {
             </div>
           )}
 
-          {/* Pagination + Load More */}
+          {/* Load More / Back to Top */}
           {images.length > 0 && (
             <div className="flex flex-col items-center gap-4 pt-6 border-t border-border">
-              <div className="flex items-center gap-3">
+              {hasMore ? (
                 <button
-                  onClick={handlePrevPage}
-                  disabled={currentPage === 0 || loading}
-                  className="flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg text-sm font-medium disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed hover:brightness-110 transition-all"
+                  onClick={handleLoadMore}
+                  disabled={loading}
+                  className="px-6 py-2.5 bg-accent text-accent-foreground rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110 transition-all flex items-center gap-2"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                  Previous
+                  {loading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-accent-foreground border-t-transparent rounded-full animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    "Load More Wallpapers"
+                  )}
                 </button>
-
-                <span className="px-4 py-2 bg-surface border border-border rounded-lg text-sm font-semibold text-primary min-w-[100px] text-center">
-                  Page {currentPage + 1}
-                </span>
-
-                <button
-                  onClick={handleNextPage}
-                  disabled={!hasMore || loading}
-                  className="flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-lg text-sm font-medium disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed hover:brightness-110 transition-all"
-                >
-                  Next
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+              ) : (
+                <div className="flex flex-col items-center gap-3">
+                  <p className="text-muted text-sm">You've reached the end!</p>
+                  <button
+                    onClick={handleBackToTop}
+                    className="px-4 py-2 bg-surface border border-border text-primary rounded-lg text-sm font-medium hover:bg-muted/10 transition-all flex items-center gap-2"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </button>
-              </div>
-
-              <button
-                onClick={handleLoadMore}
-                disabled={!hasMore || loading}
-                className="px-6 py-2.5 bg-surface border border-border text-primary rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-muted/10 transition-all"
-              >
-                {loading
-                  ? "Loading..."
-                  : hasMore
-                  ? "Load More Wallpapers"
-                  : "No more wallpapers"}
-              </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 10l7-7m0 0l7 7m-7-7v18"
+                      />
+                    </svg>
+                    Back to Top
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </>

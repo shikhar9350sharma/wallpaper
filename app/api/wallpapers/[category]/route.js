@@ -30,10 +30,16 @@ export async function GET(req, { params }) {
       },
     });
   } catch (error) {
+    // Log full error server-side for debugging
     console.error("ImageKit Category API Error:", error);
+    
+    // Send generic error to client — never expose internal details
     return new Response(
-      JSON.stringify({ error: "Failed to fetch category wallpapers", details: error.message }),
-      { status: 500 }
+      JSON.stringify({ error: "Failed to fetch category wallpapers. Please try again later." }),
+      { 
+        status: 500,
+        headers: { "Content-Type": "application/json" }
+      }
     );
   }
 }
